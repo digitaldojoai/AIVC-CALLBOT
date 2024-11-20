@@ -110,9 +110,6 @@ const VoiceCall = forwardRef((props, ref) => {
           alt="Company Logo"
           className="h-[150px] mb-6 max-md:-mb-8 max-md:-mt-4"
         />
-        {/* <h1 style={{ fontSize: "24px", color: "white", textAlign: "center" }}>
-          {connected ? `Calling AI VC` : "start a call"}
-        </h1> */}
 
         {!connected ? (
           <div className="w-[400px] max-md:w-full">
@@ -122,6 +119,7 @@ const VoiceCall = forwardRef((props, ref) => {
               onClick={handleCallClick}
               fullWidth
               sx={{ marginTop: "20px" }}
+              size="large"
             >
               Call Now
             </Button>
