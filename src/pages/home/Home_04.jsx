@@ -9,7 +9,7 @@ import Service from "../../components/sections/home_04/Service";
 const Home_04 = () => {
   return (
     <>
-      <div className="page-wrapper relative z-[1] bg-black text-white">
+      <div className="page-wrapper relative z-[1] bg-black text-white mb-8">
         <Header
           loginCSS="hidden border-b-2 border-transparent font-bold text-white transition-all duration-300 hover:border-colorGreen hover:text-colorGreen lg:inline-block"
           signupCSS="button hidden h-full rounded border-none bg-colorGreen py-3 text-base text-black after:border-none after:bg-white lg:inline-block"
@@ -38,7 +38,6 @@ const Home_04 = () => {
           <Cta />
           {/*...::: CTA Section End :::... */}
         </main>
-        <Footer_04 />
       </div>
     </>
   );
