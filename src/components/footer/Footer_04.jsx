@@ -271,7 +271,7 @@ const Footer_04 = () => {
               <div className="flex flex-wrap items-center justify-center gap-5 text-center md:justify-between md:text-left">
                 <Link to="/">
                   <img
-                    src="https://hollo.ai/assets/images/home/Hollo_Logo-10-Color.png"
+                    src="/assets/img/th-1/hollo-logo.png"
                     alt="logo-light"
                     width={111}
                     height={23}
