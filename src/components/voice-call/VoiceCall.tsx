@@ -108,24 +108,24 @@ const VoiceCall = forwardRef((props, ref) => {
         <img
           src="https://hollo.ai/assets/images/home/Hollo_Logo-10-Color.png"
           alt="Company Logo"
-          style={{ height: "150px", marginBottom: "30px" }}
+          className="h-[150px] mb-6 max-md:-mb-8 max-md:-mt-4"
         />
-        <h1 style={{ fontSize: "24px", color: "white", textAlign: "center" }}>
+        {/* <h1 style={{ fontSize: "24px", color: "white", textAlign: "center" }}>
           {connected ? `Calling AI VC` : "start a call"}
-        </h1>
+        </h1> */}
 
         {!connected ? (
-          <>
+          <div className="w-[400px] max-md:w-full">
             <Button
               variant="contained"
               color="primary"
               onClick={handleCallClick}
               fullWidth
-              sx={{ width: 400, marginTop: "20px" }}
+              sx={{ marginTop: "20px" }}
             >
-              Call
+              Call Now
             </Button>
-          </>
+          </div>
         ) : (
           <ActiveCallDetail
             onEndCallClick={handleEndCall}

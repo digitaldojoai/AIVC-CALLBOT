@@ -1,3 +1,5 @@
+import VoiceCall from "../../voice-call/VoiceCall";
+
 const Hero = () => {
   return (
     <section id="hero-section">
@@ -16,6 +18,9 @@ const Hero = () => {
                 listening on behalf of your business, our platform helps you
                 move forward.
               </p>
+            </div>
+            <div className="md:m-8">
+              <VoiceCall />
             </div>
           </div>
           {/* Section Container */}

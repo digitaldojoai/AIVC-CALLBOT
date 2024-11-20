@@ -7,8 +7,7 @@ const LogoDark = ({ light }) => {
       <img
         src={"https://hollo.ai/assets/images/home/Hollo_Logo-10-Color.png"}
         alt="AIMass"
-        width="96"
-        height="24"
+        className="w-44"
       />
     </Link>
   );

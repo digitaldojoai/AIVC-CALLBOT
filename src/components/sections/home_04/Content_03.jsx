@@ -15,16 +15,13 @@ const Content_03 = () => {
         {/* Section Container */}
         <div className="global-container">
           {/* Section Content Block */}
-          <div className="jos  max-w-[480px]  lg:max-w-2xl xl:max-w-[800px]">
+          <div className="jos mb-10 max-w-[480px] md:mb-16 lg:mb-20 lg:max-w-2xl xl:max-w-[800px]">
             <h2 className="font-spaceGrotesk text-4xl font-medium leading-[1.06] -tracking-[2px] text-white sm:text-[44px] lg:text-[56px] xl:text-[70px]">
               TRY IT NOW
             </h2>
             <h4 className="font-spaceGrotesk text-4xl font-medium leading-[1.06] -tracking-[2px] text-white sm:text-[30px] lg:text-[35px] xl:text-[40px]">
               Ready to try it? Start your pitch or hear a pitch now.
             </h4>
-          </div>
-          <div className="m-8">
-            <VoiceCall />
           </div>
           {/* Section Content Block */}
           <div
