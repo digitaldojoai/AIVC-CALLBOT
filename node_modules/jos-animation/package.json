@@ -1,0 +1,36 @@
+{
+  "name": "jos-animation",
+  "version": "0.9.2",
+  "description": "An animation library package to instantly add beautiful/professional looking animation to your website",
+  "author": "Jesvi Jonathan",
+  "files": [
+    "dist/*.{css,js}",
+    "dev/*.{css,js}"
+  ],
+  "main": "dist/jos.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jesvijonathan/JOS-Animation-Library.git"
+  },
+  "keywords": [
+    "jos",
+    "on-scroll",
+    "scroll",
+    "animation",
+    "library",
+    "package",
+    "jesvi",
+    "uikit",
+    "javascript",
+    "lightweight",
+    "performance",
+    "scroll",
+    "event",
+    "css"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jesvijonathan/JOS-Animation-Library/issues"
+  },
+  "homepage": "jos-animation.vercel.app"
+}

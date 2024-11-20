@@ -1,0 +1,26 @@
+[
+  {
+    "icon_black": "assets/img/th-1/service-icon-black-1.svg",
+    "icon_orange": "assets/img/th-1/service-icon-orange-1.svg",
+    "title": "Resource Flexibility",
+    "text": "This is an excellent option for people &amp; small businesses who are starting out."
+  },
+  {
+    "icon_black": "assets/img/th-1/service-icon-black-2.svg",
+    "icon_orange": "assets/img/th-1/service-icon-orange-2.svg",
+    "title": "Managed Services",
+    "text": "This is an excellent option for people &amp; small businesses who are starting out."
+  },
+  {
+    "icon_black": "assets/img/th-1/service-icon-black-3.svg",
+    "icon_orange": "assets/img/th-1/service-icon-orange-3.svg",
+    "title": "Web-Based Access",
+    "text": "This is an excellent option for people &amp; small businesses who are starting out."
+  },
+  {
+    "icon_black": "assets/img/th-1/service-icon-black-4.svg",
+    "icon_orange": "assets/img/th-1/service-icon-orange-4.svg",
+    "title": "Resource Flexibility",
+    "text": "This is an excellent option for people &amp; small businesses who are starting out."
+  }
+]
