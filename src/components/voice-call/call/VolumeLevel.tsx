@@ -4,18 +4,29 @@ import * as THREE from "three";
 
 const numBars = 10;
 
+interface BarProps {
+  index: number;
+  volume: number;
+}
+
+interface VolumeLevelProps {
+  volume: number;
+}
+
 // Component for individual bar in the 3D visualization
-const Bar = ({ index, volume }) => {
-  const barRef = useRef();
+const Bar: React.FC<BarProps> = ({ index, volume }) => {
+  const barRef = useRef<THREE.Mesh>(null);
 
   // Update the height of the bar based on the volume
   useFrame(() => {
-    const scale = index / numBars < volume ? 1 + volume * 2 : 0.5;
-    barRef.current.scale.y = THREE.MathUtils.lerp(
-      barRef.current.scale.y,
-      scale,
-      0.1
-    );
+    if (barRef.current) {
+      const scale = index / numBars < volume ? 1 + volume * 2 : 0.5;
+      (barRef.current as any).scale.y = THREE.MathUtils.lerp(
+        (barRef.current as any).scale.y,
+        scale,
+        0.1
+      );
+    }
   });
 
   return (
@@ -28,7 +39,7 @@ const Bar = ({ index, volume }) => {
   );
 };
 
-const VolumeLevel = ({ volume }) => {
+const VolumeLevel: React.FC<VolumeLevelProps> = ({ volume }) => {
   return (
     <div style={{ width: "100%", height: "100px" }}>
       <Canvas camera={{ position: [0, 5, 10], fov: 50 }}>
