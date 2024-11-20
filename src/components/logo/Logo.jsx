@@ -1,16 +1,14 @@
-import { Link } from 'react-router-dom';
-import logoDark from '../../assets/img/logo-dark.png';
-import logoLight from '../../assets/img/logo-light.png';
+import { Link } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 const LogoDark = ({ light }) => {
   return (
-    <Link to='/'>
+    <Link to="/">
       <img
-        src={light ? logoLight : logoDark}
-        alt='AIMass'
-        width='96'
-        height='24'
+        src={"https://hollo.ai/assets/images/home/Hollo_Logo-10-Color.png"}
+        alt="AIMass"
+        width="96"
+        height="24"
       />
     </Link>
   );
