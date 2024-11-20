@@ -1,9 +1,4 @@
-import { Link } from "react-router-dom";
-
 const Hero = () => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
   return (
     <section id="hero-section">
       <div className="relative z-[1] overflow-hidden text-center text-white">
@@ -20,44 +15,6 @@ const Hero = () => {
                 ideas and receive valuable feedback. Whether you're pitching or
                 listening on behalf of your business, our platform helps you
                 move forward.
-              </p>
-            </div>
-            <form
-              onSubmit={handleSubmit}
-              className="jos mt-11 text-base font-bold"
-            >
-              <div className="relative mx-auto h-[60px] max-w-[500px] overflow-hidden rounded">
-                <input
-                  type="email"
-                  placeholder="Enter your email..."
-                  className="h-full w-full bg-colorCodGray px-6 pr-[150px]"
-                  required=""
-                />
-                <button
-                  type="submit"
-                  className="button absolute right-0 top-0 inline-block h-full rounded border-none bg-colorGreen py-0 text-black after:border-none after:bg-white"
-                >
-                  Get Started
-                </button>
-              </div>
-            </form>
-            <div className="jos mt-4 flex items-center justify-center gap-x-[10px] text-center text-base">
-              <img
-                src="assets/img/th-4/icon-green-badge-check.svg"
-                alt="icon-green-badge-check.svg"
-                width={20}
-                height={20}
-                className="inline-block"
-              />
-              <p>
-                By signing up you agree to our
-                <Link
-                  rel="noopener noreferrer"
-                  to="#"
-                  className="underline hover:text-colorGreen"
-                >
-                  Terms &amp; Conditions.
-                </Link>
               </p>
             </div>
           </div>

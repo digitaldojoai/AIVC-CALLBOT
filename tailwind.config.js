@@ -34,7 +34,7 @@ export default {
         colorOrangyRed: "#FE330A",
         colorLinenRuffle: "#EFEAE3",
         colorViolet: "#321CA4",
-        colorGreen: "#4b17b8",
+        colorGreen: "#00adee",
       },
     },
   },
