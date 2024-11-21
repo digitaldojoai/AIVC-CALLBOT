@@ -2,7 +2,11 @@
 import { ThemeProvider } from "@emotion/react";
 import {
   Box,
-  Checkbox,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
   createTheme,
   CssBaseline,
   Dialog,
@@ -20,7 +24,9 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
+import { toast } from "sonner";
 import ActiveCallDetail from "./ActiveCallDetail";
+
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
@@ -29,6 +35,7 @@ const darkTheme = createTheme({
     },
   },
 });
+
 // Initialize Vapi with your Public Key
 const vapi = new Vapi(import.meta.env.VITE_VAPI_PUBLIC_KEY);
 
@@ -43,6 +50,9 @@ const VoiceCall = forwardRef((props, ref) => {
   const [volumeLevel, setVolumeLevel] = useState(0);
   const [assistantIsSpeaking, setAssistantIsSpeaking] = useState(false);
   const [sessionId, setSessionId] = useState<string | undefined>();
+  const [userType, setUserType] = useState("");
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Expose the handleClick method to parent components
   useImperativeHandle(ref, () => ({
@@ -78,52 +88,160 @@ const VoiceCall = forwardRef((props, ref) => {
     vapi.on("speech-end", () => setAssistantIsSpeaking(false));
     vapi.on("volume-level", (level) => setVolumeLevel(level));
     vapi.on("error", (error) => console.error("Vapi emitted an error:", error));
-    // vapi
     return () => {
       vapi.stop();
     };
   }, []);
 
-  console.log("connected ", connected);
   const screenSize = window.innerWidth;
+
+  const handleSubmit = async () => {
+    if (!email || !userType) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(
+        "https://api.hollo.ai/v1/callbot/analyze-call",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            callId: sessionId,
+            email: email,
+            feedbackType: userType === "startup" ? "startup" : "investor",
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.errors || "Failed to analyze call");
+      }
+
+      toast.success("Feedback email sent successfully");
+      setSessionId(undefined);
+    } catch (error) {
+      console.error("Error analyzing call:", error);
+      toast.error(error.message || "Failed to analyze call. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <>
       <Dialog
         open={!connected && sessionId ? true : false}
         onClose={() => setSessionId(undefined)}
+        PaperProps={{
+          style: {
+            borderRadius: "12px",
+            backgroundColor: "#ffffff",
+            color: "#333333",
+          },
+        }}
       >
-        <div className="p-4 space-y-4">
-          <p className="font-semibold text-2xl max-md:text-lg">
-            Receive Feedback for the Pitch
-          </p>
-          <div className="space-y-2">
-            <p className="max-sm:text-sm">Email</p>
+        <div className="p-6 space-y-6 min-w-[350px]">
+          <h2 className="font-semibold text-2xl max-md:text-xl text-center text-[#00adee]">
+            Receive Pitch Feedback
+          </h2>
+
+          <div className="space-y-4">
             <TextField
-              title="Email"
-              placeholder="Email"
-              size={screenSize < 768 ? "small" : "medium"}
+              label="Email Address"
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               fullWidth
+              size={screenSize < 768 ? "small" : "medium"}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#e0e0e0",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#00adee",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "#666666",
+                },
+              }}
             />
+
+            <FormControl component="fieldset" className="w-full">
+              <FormLabel component="legend" sx={{ color: "#666666" }}>
+                I am a:
+              </FormLabel>
+              <RadioGroup
+                value={userType}
+                onChange={(e) => setUserType(e.target.value)}
+                className="mt-2"
+              >
+                <FormControlLabel
+                  value="vc"
+                  control={
+                    <Radio
+                      sx={{
+                        "&.Mui-checked": {
+                          color: "#00adee",
+                        },
+                        color: "#666666",
+                      }}
+                    />
+                  }
+                  label="Venture Capitalist"
+                />
+                <FormControlLabel
+                  value="startup"
+                  control={
+                    <Radio
+                      sx={{
+                        "&.Mui-checked": {
+                          color: "#00adee",
+                        },
+                        color: "#666666",
+                      }}
+                    />
+                  }
+                  label="Startup Founder"
+                />
+              </RadioGroup>
+            </FormControl>
           </div>
-          <div>
-            <div className="flex items-center">
-              <Checkbox size={screenSize < 768 ? "small" : "medium"} />
-              <p className="relative top-[1px]">I am a VC</p>
-            </div>
-            <div className="flex items-center">
-              <Checkbox size={screenSize < 768 ? "small" : "medium"} />
-              <p className="relative top-[1px]">I am a Startup</p>
-            </div>
-          </div>
-          <div className="flex justify-end">
-            {" "}
-            <Button variant="contained" color="primary">
-              Submit
+
+          <div className="flex justify-end pt-4">
+            <Button
+              variant="contained"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+              sx={{
+                backgroundColor: "#00adee",
+                "&:hover": {
+                  backgroundColor: "#0095cc",
+                },
+                textTransform: "none",
+                borderRadius: "8px",
+                padding: "8px 24px",
+              }}
+            >
+              {isSubmitting ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Submit"
+              )}
             </Button>
           </div>
         </div>
       </Dialog>
+
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <Box
@@ -139,7 +257,6 @@ const VoiceCall = forwardRef((props, ref) => {
               onEndCallClick={handleEndCall}
               volumeLevel={volumeLevel}
               connected={connected}
-              // assistantIsSpeaking={assistantIsSpeaking}
             />
           </div>
           <div className={`w-[400px] max-md:w-full mt-8 md:mt-20`}>
@@ -155,8 +272,14 @@ const VoiceCall = forwardRef((props, ref) => {
               }}
               fullWidth
               size="large"
+              sx={{
+                borderRadius: "8px",
+                padding: "12px",
+                fontSize: "1.1rem",
+                textTransform: "none",
+              }}
             >
-              {connected ? "Hang Up" : "Call Now"}
+              {connected ? "End Call" : "Start Call"}
             </Button>
           </div>
         </Box>
