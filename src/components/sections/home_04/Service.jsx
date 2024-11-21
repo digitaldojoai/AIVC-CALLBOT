@@ -21,11 +21,13 @@ const Service = () => {
             >
               <div className="mb-8 flex items-center gap-x-6">
                 <div className="flex-1 font-spaceGrotesk text-3xl leading-[1.33]">
-                  Pitch & Feedback
+                  AI-Driven Startup Pitching
                 </div>
               </div>
               <p className="mb-7 text-[21px] leading-[1.4]">
-                Pitch your startup or hear pitches for your business.
+                Startups can confidently present their ideas to the AI VC, which
+                listens, analyzes, and provides immediate insights to enhance
+                their pitch effectiveness.
               </p>
             </li>
             {/* Service Item */}
@@ -36,11 +38,13 @@ const Service = () => {
             >
               <div className="mb-8 flex items-center gap-x-6">
                 <div className="flex-1 font-spaceGrotesk text-3xl leading-[1.33]">
-                  AI Feedback
+                  Smart Investor Briefing
                 </div>
               </div>
               <p className="mb-7 text-[21px] leading-[1.4]">
-                Get actionable feedback automatically after each pitch.
+                VCs receive well-structured summaries of pitches, highlighting
+                essential metrics, business potential, and market fit, saving
+                time and improving decision-making.
               </p>
             </li>
             {/* Service Item */}
@@ -51,12 +55,13 @@ const Service = () => {
             >
               <div className="mb-8 flex items-center gap-x-6">
                 <div className="flex-1 font-spaceGrotesk text-3xl leading-[1.33]">
-                  Network Security
+                  Personalized Guidance for Founders
                 </div>
               </div>
               <p className="mb-7 text-[21px] leading-[1.4]">
-                Network traffic attempts and can take automated actions to
-                block.
+                Tailored recommendations help startups fine-tune their business
+                models, storytelling, and value propositions based on AI-driven
+                feedback.
               </p>
             </li>
             {/* Service Item */}
@@ -67,11 +72,12 @@ const Service = () => {
             >
               <div className="mb-8 flex items-center gap-x-6">
                 <div className="flex-1 font-spaceGrotesk text-3xl leading-[1.33]">
-                  Easy Calls
+                  Effortless Meeting Summaries
                 </div>
               </div>
               <p className="mb-7 text-[21px] leading-[1.4]">
-                Start your pitch or listen to a pitch with just one click.
+                Automated post-call emails deliver actionable summaries to both
+                parties, ensuring clarity and alignment for follow-up actions.
               </p>
             </li>
             {/* Service Item */}
@@ -82,11 +88,27 @@ const Service = () => {
             >
               <div className="mb-8 flex items-center gap-x-6">
                 <div className="flex-1 font-spaceGrotesk text-3xl leading-[1.33]">
-                  Personalized Experience
+                  Dynamic Two-Way Engagement
                 </div>
               </div>
               <p className="mb-7 text-[21px] leading-[1.4]">
-                The AI tailors feedback for both startups and VCs.
+                The AI VC adapts to the needs of both investors and founders,
+                fostering productive conversations that benefit both sides of
+                the table.
+              </p>
+            </li>
+            <li
+              className="jos group rounded-[10px] bg-[#121212] p-[30px]"
+              data-jos_delay="0.5"
+            >
+              <div className="mb-8 flex items-center gap-x-6">
+                <div className="flex-1 font-spaceGrotesk text-3xl leading-[1.33]">
+                  Scalable Pitch and Feedback Platform
+                </div>
+              </div>
+              <p className="mb-7 text-[21px] leading-[1.4]">
+                Whether it’s 10 pitches or 100, the AI VC scales effortlessly,
+                providing consistent quality insights and reports to all users.
               </p>
             </li>
           </ul>
