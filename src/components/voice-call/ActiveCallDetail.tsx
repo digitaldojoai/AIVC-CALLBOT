@@ -5,8 +5,10 @@ import { Box, Button } from "@mui/material";
 const ActiveCallDetail = ({
   volumeLevel,
   onEndCallClick,
+  connected,
 }: {
   volumeLevel: number;
+  connected: boolean;
   onEndCallClick: () => void;
 }) => {
   return (
@@ -20,17 +22,6 @@ const ActiveCallDetail = ({
       }}
     >
       <VolumeLevel volume={volumeLevel} />
-      <Box sx={{ textAlign: "center", width: "100%" }}>
-        {/* Default MUI button with 'error' color for Hang Up */}
-        <Button
-          variant="contained"
-          color="error" // Use MUI's error color for danger (red)
-          onClick={onEndCallClick}
-          fullWidth
-        >
-          Hang Up
-        </Button>
-      </Box>
     </Box>
   );
 };

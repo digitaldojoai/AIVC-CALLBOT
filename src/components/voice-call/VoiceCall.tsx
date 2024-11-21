@@ -1,6 +1,14 @@
 /// <reference types="vite/client" />
 import { ThemeProvider } from "@emotion/react";
-import { Box, createTheme, CssBaseline } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  createTheme,
+  CssBaseline,
+  Dialog,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -34,30 +42,12 @@ const VoiceCall = forwardRef((props, ref) => {
   const [callEnabled, setCallEnabled] = useState(false);
   const [volumeLevel, setVolumeLevel] = useState(0);
   const [assistantIsSpeaking, setAssistantIsSpeaking] = useState(false);
+  const [sessionId, setSessionId] = useState<string | undefined>();
 
   // Expose the handleClick method to parent components
   useImperativeHandle(ref, () => ({
     handleClick: handleCallClick,
   }));
-
-  const getAssistants = async () => {
-    setLoading(true);
-    const options = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${import.meta.env.VITE_VAPI_TOKEN}`,
-      },
-    };
-
-    fetch("https://api.vapi.ai/assistant", options)
-      .then((response) => response.json())
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(() => {
-    getAssistants();
-  }, []);
 
   const handleAssistantSelect = (event, value) => {
     setSelectedAssistant(value);
@@ -69,7 +59,9 @@ const VoiceCall = forwardRef((props, ref) => {
     if (selectedAssistant) {
       setConnected(true);
       try {
-        vapi.start(selectedAssistant);
+        vapi.start(selectedAssistant).then((e) => {
+          setSessionId(e?.id);
+        });
       } catch (error) {
         console.error("Error starting call with Vapi:", error);
       }
@@ -86,53 +78,91 @@ const VoiceCall = forwardRef((props, ref) => {
     vapi.on("speech-end", () => setAssistantIsSpeaking(false));
     vapi.on("volume-level", (level) => setVolumeLevel(level));
     vapi.on("error", (error) => console.error("Vapi emitted an error:", error));
-
+    // vapi
     return () => {
       vapi.stop();
     };
   }, []);
 
   console.log("connected ", connected);
+  const screenSize = window.innerWidth;
 
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "20px",
-        }}
+    <>
+      <Dialog
+        open={!connected && sessionId ? true : false}
+        onClose={() => setSessionId(undefined)}
       >
-        <img
-          src="https://hollo.ai/assets/images/home/Hollo_Logo-10-Color.png"
-          alt="Company Logo"
-          className="h-[150px] mb-6 max-md:-mb-8 max-md:-mt-4"
-        />
-
-        {!connected ? (
-          <div className="w-[400px] max-md:w-full">
+        <div className="p-4 space-y-4">
+          <p className="font-semibold text-2xl max-md:text-lg">
+            Receive Feedback for the Pitch
+          </p>
+          <div className="space-y-2">
+            <p className="max-sm:text-sm">Email</p>
+            <TextField
+              title="Email"
+              placeholder="Email"
+              size={screenSize < 768 ? "small" : "medium"}
+              fullWidth
+            />
+          </div>
+          <div>
+            <div className="flex items-center">
+              <Checkbox size={screenSize < 768 ? "small" : "medium"} />
+              <p className="relative top-[1px]">I am a VC</p>
+            </div>
+            <div className="flex items-center">
+              <Checkbox size={screenSize < 768 ? "small" : "medium"} />
+              <p className="relative top-[1px]">I am a Startup</p>
+            </div>
+          </div>
+          <div className="flex justify-end">
+            {" "}
+            <Button variant="contained" color="primary">
+              Submit
+            </Button>
+          </div>
+        </div>
+      </Dialog>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "20px",
+          }}
+        >
+          <div className="mt-8">
+            <ActiveCallDetail
+              onEndCallClick={handleEndCall}
+              volumeLevel={volumeLevel}
+              connected={connected}
+              // assistantIsSpeaking={assistantIsSpeaking}
+            />
+          </div>
+          <div className={`w-[400px] max-md:w-full `}>
             <Button
               variant="contained"
-              color="primary"
-              onClick={handleCallClick}
+              color={connected ? "error" : "primary"}
+              onClick={() => {
+                if (connected) {
+                  handleEndCall();
+                } else {
+                  handleCallClick();
+                }
+              }}
               fullWidth
               sx={{ marginTop: "20px" }}
               size="large"
             >
-              Call Now
+              {connected ? "Hang Up" : "Call Now"}
             </Button>
           </div>
-        ) : (
-          <ActiveCallDetail
-            onEndCallClick={handleEndCall}
-            volumeLevel={volumeLevel}
-            // assistantIsSpeaking={assistantIsSpeaking}
-          />
-        )}
-      </Box>
-    </ThemeProvider>
+        </Box>
+      </ThemeProvider>
+    </>
   );
 });
 
