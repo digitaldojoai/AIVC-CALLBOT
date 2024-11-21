@@ -134,7 +134,7 @@ const VoiceCall = forwardRef((props, ref) => {
             padding: "20px",
           }}
         >
-          <div className="mt-8">
+          <div className="mt-4">
             <ActiveCallDetail
               onEndCallClick={handleEndCall}
               volumeLevel={volumeLevel}
@@ -142,7 +142,7 @@ const VoiceCall = forwardRef((props, ref) => {
               // assistantIsSpeaking={assistantIsSpeaking}
             />
           </div>
-          <div className={`w-[400px] max-md:w-full `}>
+          <div className={`w-[400px] max-md:w-full mt-8 md:mt-20`}>
             <Button
               variant="contained"
               color={connected ? "error" : "primary"}
@@ -154,7 +154,6 @@ const VoiceCall = forwardRef((props, ref) => {
                 }
               }}
               fullWidth
-              sx={{ marginTop: "20px" }}
               size="large"
             >
               {connected ? "Hang Up" : "Call Now"}

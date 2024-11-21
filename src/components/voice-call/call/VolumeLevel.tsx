@@ -93,7 +93,7 @@ const VoiceLevel: React.FC<VoiceLevelProps> = ({ volume: externalVolume }) => {
         {/* Background circle with gradient */}
         <div
           ref={circleRef}
-          className="w-32 h-32 md:w-48 md:h-48 mb-4 md:mb-12 rounded-full transition-all duration-150 ease-out"
+          className="w-40 h-40 md:w-56 md:h-56  rounded-full transition-all duration-150 ease-out"
           style={{
             backgroundImage: `url("/assets/ai-vid.gif")`,
             backgroundSize: "cover",
