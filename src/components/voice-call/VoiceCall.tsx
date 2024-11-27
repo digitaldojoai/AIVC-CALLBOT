@@ -50,8 +50,7 @@ const VoiceCall = forwardRef((props, ref) => {
   const [volumeLevel, setVolumeLevel] = useState(0);
   const [assistantIsSpeaking, setAssistantIsSpeaking] = useState(false);
   const [sessionId, setSessionId] = useState<string | undefined>();
-  const [isInvestor, setIsInvestor] = useState(false);
-  const [isStartup, setIsStartup] = useState(false);
+  const [userType, setUserType] = useState("");
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -97,7 +96,7 @@ const VoiceCall = forwardRef((props, ref) => {
   const screenSize = window.innerWidth;
 
   const handleSubmit = async () => {
-    if (!email || (!isInvestor && !isStartup)) {
+    if (!email || !userType) {
       toast.error("Please fill in all fields");
       return;
     }
@@ -115,8 +114,7 @@ const VoiceCall = forwardRef((props, ref) => {
           body: JSON.stringify({
             callId: sessionId,
             email: email,
-            isInvestorFeedback: isInvestor,
-            isStartupFeedback: isStartup,
+            feedbackType: userType === "startup" ? "startup" : "investor",
           }),
         }
       );
@@ -140,7 +138,7 @@ const VoiceCall = forwardRef((props, ref) => {
   return (
     <>
       <Dialog
-        open={!connected && sessionId ? true : true}
+        open={!connected && sessionId ? true : false}
         onClose={() => setSessionId(undefined)}
         PaperProps={{
           style: {
@@ -182,37 +180,40 @@ const VoiceCall = forwardRef((props, ref) => {
               <FormLabel component="legend" sx={{ color: "#666666" }}>
                 I am a:
               </FormLabel>
-
-              <FormControlLabel
-                control={
-                  <Radio
-                    sx={{
-                      "&.Mui-checked": {
-                        color: "#00adee",
-                      },
-                      color: "#666666",
-                    }}
-                  />
-                }
-                label="Venture Capitalist"
-                checked={isInvestor}
-                onClick={() => setIsInvestor(!isInvestor)}
-              />
-              <FormControlLabel
-                control={
-                  <Radio
-                    sx={{
-                      "&.Mui-checked": {
-                        color: "#00adee",
-                      },
-                      color: "#666666",
-                    }}
-                  />
-                }
-                label="Startup Founder"
-                checked={isStartup}
-                onClick={() => setIsStartup(!isStartup)}
-              />
+              <RadioGroup
+                value={userType}
+                onChange={(e) => setUserType(e.target.value)}
+                className="mt-2"
+              >
+                <FormControlLabel
+                  value="vc"
+                  control={
+                    <Radio
+                      sx={{
+                        "&.Mui-checked": {
+                          color: "#00adee",
+                        },
+                        color: "#666666",
+                      }}
+                    />
+                  }
+                  label="Venture Capitalist"
+                />
+                <FormControlLabel
+                  value="startup"
+                  control={
+                    <Radio
+                      sx={{
+                        "&.Mui-checked": {
+                          color: "#00adee",
+                        },
+                        color: "#666666",
+                      }}
+                    />
+                  }
+                  label="Startup Founder"
+                />
+              </RadioGroup>
             </FormControl>
           </div>
 
