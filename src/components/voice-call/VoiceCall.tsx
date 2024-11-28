@@ -140,7 +140,7 @@ const VoiceCall = forwardRef((props, ref) => {
   return (
     <>
       <Dialog
-        open={!connected && sessionId ? true : true}
+        open={!connected && sessionId ? true : false}
         onClose={() => setSessionId(undefined)}
         PaperProps={{
           style: {

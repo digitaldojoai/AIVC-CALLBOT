@@ -9,7 +9,7 @@ const Header = ({ loginCSS, signupCSS, navColor, light }) => {
 
   return (
     <header
-      className="site-header site-header--absolute is--white py-3"
+      className="site-header site-header--absolute is--white py-3 headerContainer"
       id="sticky-menu"
     >
       <div className="global-container">
