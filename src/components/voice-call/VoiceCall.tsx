@@ -20,6 +20,7 @@ import TextField from "@mui/material/TextField";
 import Vapi from "@vapi-ai/web";
 import React, {
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useState,
@@ -65,34 +66,54 @@ const VoiceCall = forwardRef((props, ref) => {
     setCallEnabled(!!value);
   };
 
-  const handleCallClick = () => {
-    console.log("selectedAssistant", selectedAssistant);
+  // Create cleanup function
+  const cleanup = useCallback(() => {
+    vapi.stop();
+    vapi.removeAllListeners(); // Remove all event listeners
+    setConnected(false);
+    setVolumeLevel(0);
+    setAssistantIsSpeaking(false);
+  }, []);
+
+  // Handle call end
+  const handleEndCall = useCallback(() => {
+    cleanup();
+  }, [cleanup]);
+
+  // Setup event listeners
+  useEffect(() => {
+    const setupListeners = () => {
+      vapi.on("speech-start", () => setAssistantIsSpeaking(true));
+      vapi.on("speech-end", () => setAssistantIsSpeaking(false));
+      vapi.on("volume-level", (level) => setVolumeLevel(level));
+      vapi.on("error", (error) => {
+        console.error("Vapi emitted an error:", error);
+        cleanup(); // Cleanup on error
+      });
+    };
+
+    setupListeners();
+
+    // Cleanup when component unmounts
+    return () => {
+      cleanup();
+    };
+  }, [cleanup]);
+
+  // Handle call start
+  const handleCallClick = async () => {
     if (selectedAssistant) {
-      setConnected(true);
       try {
-        vapi.start(selectedAssistant).then((e) => {
-          setSessionId(e?.id);
-        });
+        setConnected(true);
+        const response = await vapi.start(selectedAssistant);
+        setSessionId(response?.id);
       } catch (error) {
         console.error("Error starting call with Vapi:", error);
+        cleanup(); // Cleanup on error
+        toast.error("Failed to start call. Please try again.");
       }
     }
   };
-
-  const handleEndCall = () => {
-    setConnected(false);
-    vapi.stop();
-  };
-
-  useEffect(() => {
-    vapi.on("speech-start", () => setAssistantIsSpeaking(true));
-    vapi.on("speech-end", () => setAssistantIsSpeaking(false));
-    vapi.on("volume-level", (level) => setVolumeLevel(level));
-    vapi.on("error", (error) => console.error("Vapi emitted an error:", error));
-    return () => {
-      vapi.stop();
-    };
-  }, []);
 
   const screenSize = window.innerWidth;
 
@@ -150,12 +171,75 @@ const VoiceCall = forwardRef((props, ref) => {
           },
         }}
       >
-        <div className="p-6 space-y-6 min-w-[350px]">
-          <h2 className="font-semibold text-2xl max-md:text-xl text-center text-[#00adee]">
-            Receive Pitch Feedback
-          </h2>
+        <div className="p-6 space-y-6 ">
+          <div>
+            <h2 className="font-semibold text-3xl max-md:text-2xl text-center ">
+              Receive Pitch Feedback
+            </h2>
+            <p className="text-center text-sm">
+              Select your role to get your feedback.
+            </p>
+          </div>
+          <FormControl component="fieldset" className="w-full">
+            <h2 className="text-2xl max-md:text-xl"> You Are A:</h2>
 
+            <div
+              className="flex items-start gap-4 border border-black rounded-xl p-4 select-none cursor-pointer mb-4"
+              onClick={() => {
+                console.log("startup");
+                setIsInvestor(!isInvestor);
+              }}
+            >
+              <Radio
+                sx={{
+                  "&.Mui-checked": {
+                    color: "#00adee",
+                  },
+                  color: "#666666",
+                }}
+                checked={isInvestor}
+              />
+              <div>
+                <p className="text-[#00adee] font-bold text-2xl max-md:text-lg">
+                  Venture Capitalist
+                </p>
+                <p className="text-sm max-md:text-xs">
+                  You will receive a summary of the pitch you just receive with
+                  feedback helping decisions-making.
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex items-start gap-4 border border-black rounded-xl p-4  select-none cursor-pointer"
+              onClick={() => {
+                console.log("investor");
+                setIsStartup(!isStartup);
+              }}
+            >
+              <Radio
+                sx={{
+                  "&.Mui-checked": {
+                    color: "#00adee",
+                  },
+                  color: "#666666",
+                }}
+                checked={isStartup}
+              />
+              <div>
+                <p className="text-[#00adee] font-bold text-2xl max-md:text-lg">
+                  Start-Up Founder
+                </p>
+                <p className="text-sm max-md:text-xs">
+                  You will receive feedback on your given pitch to help improve
+                  for the better.
+                </p>
+              </div>
+            </div>
+          </FormControl>
           <div className="space-y-4">
+            <h2 className="text-2xl max-md:text-xl">
+              Enter Your Email Address
+            </h2>
             <TextField
               label="Email Address"
               variant="outlined"
@@ -167,6 +251,7 @@ const VoiceCall = forwardRef((props, ref) => {
                 "& .MuiOutlinedInput-root": {
                   "& fieldset": {
                     borderColor: "#e0e0e0",
+                    borderRadius: "0.75rem",
                   },
                   "&:hover fieldset": {
                     borderColor: "#00adee",
@@ -175,45 +260,9 @@ const VoiceCall = forwardRef((props, ref) => {
                 "& .MuiInputLabel-root": {
                   color: "#666666",
                 },
+                borderRadius: "0.75rem",
               }}
             />
-
-            <FormControl component="fieldset" className="w-full">
-              <FormLabel component="legend" sx={{ color: "#666666" }}>
-                I am a:
-              </FormLabel>
-
-              <FormControlLabel
-                control={
-                  <Radio
-                    sx={{
-                      "&.Mui-checked": {
-                        color: "#00adee",
-                      },
-                      color: "#666666",
-                    }}
-                  />
-                }
-                label="Venture Capitalist"
-                checked={isInvestor}
-                onClick={() => setIsInvestor(!isInvestor)}
-              />
-              <FormControlLabel
-                control={
-                  <Radio
-                    sx={{
-                      "&.Mui-checked": {
-                        color: "#00adee",
-                      },
-                      color: "#666666",
-                    }}
-                  />
-                }
-                label="Startup Founder"
-                checked={isStartup}
-                onClick={() => setIsStartup(!isStartup)}
-              />
-            </FormControl>
           </div>
 
           <div className="flex justify-end pt-4">
@@ -229,6 +278,8 @@ const VoiceCall = forwardRef((props, ref) => {
                 textTransform: "none",
                 borderRadius: "8px",
                 padding: "8px 24px",
+                fontWeight: "bold",
+                fontSize: "1.1rem",
               }}
             >
               {isSubmitting ? (
