@@ -37,6 +37,27 @@ const darkTheme = createTheme({
   },
 });
 
+const data = [
+  {
+    id: "investor",
+    name: "A venture Capitalist",
+    description:
+      "You will receive a summary of the pitch you just receive with feedback helping decisions-making.",
+  },
+  {
+    id: "startup",
+    name: "A Start-Up Founder",
+    description:
+      "You will receive feedback on your given pitch to help improve for the better.",
+  },
+  {
+    id: "both",
+    name: "Both",
+    description:
+      "You will receive and summary and feedback on your pitch for better decision making and improvement.",
+  },
+];
+
 // Initialize Vapi with your Public Key
 const vapi = new Vapi(import.meta.env.VITE_VAPI_PUBLIC_KEY);
 
@@ -163,6 +184,8 @@ const VoiceCall = forwardRef((props, ref) => {
       <Dialog
         open={!connected && sessionId ? true : false}
         onClose={() => setSessionId(undefined)}
+        maxWidth="md"
+        fullWidth
         PaperProps={{
           style: {
             borderRadius: "12px",
@@ -171,123 +194,140 @@ const VoiceCall = forwardRef((props, ref) => {
           },
         }}
       >
-        <div className="p-6 space-y-6 ">
-          <div>
-            <h2 className="font-semibold text-3xl max-md:text-2xl text-center ">
-              Receive Pitch Feedback
-            </h2>
-            <p className="text-center text-sm">
-              Select your role to get your feedback.
-            </p>
-          </div>
-          <FormControl component="fieldset" className="w-full">
-            <h2 className="text-2xl max-md:text-xl"> You Are A:</h2>
-
-            <div
-              className="flex items-start gap-4 border border-black rounded-xl p-4 select-none cursor-pointer mb-4"
-              onClick={() => {
-                console.log("startup");
-                setIsInvestor(!isInvestor);
-              }}
-            >
-              <Radio
-                sx={{
-                  "&.Mui-checked": {
-                    color: "#00adee",
-                  },
-                  color: "#666666",
-                }}
-                checked={isInvestor}
-              />
-              <div>
-                <p className="text-[#00adee] font-bold text-2xl max-md:text-lg">
-                  Venture Capitalist
-                </p>
-                <p className="text-sm max-md:text-xs">
-                  You will receive a summary of the pitch you just receive with
-                  feedback helping decisions-making.
-                </p>
-              </div>
+        <div className="grid grid-cols-4">
+          <div className="p-6 space-y-6 col-span-3 relative max-md:col-span-4">
+            {/* <div className=" absolute top-0 right-0 left-0 bottom-0 min-h-full min-w-full bg-center"></div> */}
+            <div>
+              <h2 className="font-semibold text-3xl max-md:text-2xl text-center text-black">
+                Receive Pitch Feedback
+              </h2>
+              <p className="text-center text-base text-neutral-600">
+                Select your role to get your feedback.
+              </p>
             </div>
-            <div
-              className="flex items-start gap-4 border border-black rounded-xl p-4  select-none cursor-pointer"
-              onClick={() => {
-                console.log("investor");
-                setIsStartup(!isStartup);
-              }}
-            >
-              <Radio
-                sx={{
-                  "&.Mui-checked": {
-                    color: "#00adee",
-                  },
-                  color: "#666666",
-                }}
-                checked={isStartup}
-              />
-              <div>
-                <p className="text-[#00adee] font-bold text-2xl max-md:text-lg">
-                  Start-Up Founder
-                </p>
-                <p className="text-sm max-md:text-xs">
-                  You will receive feedback on your given pitch to help improve
-                  for the better.
-                </p>
-              </div>
-            </div>
-          </FormControl>
-          <div className="space-y-4">
-            <h2 className="text-2xl max-md:text-xl">
-              Enter Your Email Address
-            </h2>
-            <TextField
-              label="Email Address"
-              variant="outlined"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              fullWidth
-              size={screenSize < 768 ? "small" : "medium"}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#e0e0e0",
-                    borderRadius: "0.75rem",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#00adee",
-                  },
-                },
-                "& .MuiInputLabel-root": {
-                  color: "#666666",
-                },
-                borderRadius: "0.75rem",
-              }}
-            />
-          </div>
+            <FormControl component="fieldset" className="w-full text-black">
+              <h2 className="text-2xl max-md:text-lg mb-2 "> You Are:</h2>
 
-          <div className="flex justify-end pt-4">
-            <Button
-              variant="contained"
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-              sx={{
-                backgroundColor: "#00adee",
-                "&:hover": {
-                  backgroundColor: "#0095cc",
-                },
-                textTransform: "none",
-                borderRadius: "8px",
-                padding: "8px 24px",
-                fontWeight: "bold",
-                fontSize: "1.1rem",
-              }}
-            >
-              {isSubmitting ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : (
-                "Submit"
-              )}
-            </Button>
+              <TextField
+                select
+                value={
+                  isInvestor && isStartup
+                    ? "both"
+                    : isInvestor
+                    ? "investor"
+                    : "startup"
+                }
+                fullWidth
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === "investor") {
+                    setIsInvestor(true);
+                    setIsStartup(false);
+                  } else if (value === "startup") {
+                    setIsInvestor(false);
+                    setIsStartup(true);
+                  } else {
+                    setIsInvestor(true);
+                    setIsStartup(true);
+                  }
+                }}
+                size={screenSize < 768 ? "small" : "medium"}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#d4d4d4",
+                      borderRadius: "0.75rem",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#00adee",
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color: "#666666",
+                  },
+                  "& .MuiInputBase-input": {
+                    color: "#00adee",
+                    fontWeight: "bold",
+                    fontSize: screenSize < 768 ? "1rem" : "1.1rem",
+                    display: "flex",
+                    alignItems: "center",
+                  },
+                  borderRadius: "0.75rem",
+                }}
+              >
+                {data.map((option) => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <p className="px-4 mt-2 text-neutral-600 font-medium italic">
+                *{" "}
+                {isInvestor && isStartup
+                  ? data[2].description
+                  : isInvestor
+                  ? data[0].description
+                  : data[1].description}
+              </p>
+            </FormControl>
+            <div className="">
+              <h2 className="text-2xl max-md:text-lg text-black mb-2">
+                Enter Your Email Address
+              </h2>
+              <TextField
+                className="mt-2"
+                label="Email"
+                variant="outlined"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                fullWidth
+                size={screenSize < 768 ? "small" : "medium"}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#d4d4d4 ",
+                      borderRadius: "0.75rem",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#00adee",
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    color: "#666666",
+                  },
+
+                  borderRadius: "0.75rem",
+                }}
+              />
+            </div>
+
+            <div className="flex justify-end pt-4">
+              <Button
+                variant="contained"
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                sx={{
+                  backgroundColor: "#00adee",
+                  "&:hover": {
+                    backgroundColor: "#0095cc",
+                  },
+                  textTransform: "none",
+                  borderRadius: "8px",
+                  padding: "8px 24px",
+                  fontWeight: "bold",
+                  fontSize: "1.1rem",
+                }}
+              >
+                {isSubmitting ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  "Submit"
+                )}
+              </Button>
+            </div>
+          </div>
+          <div className="relative col-span-1 max-md:hidden">
+            <div className="bg-[url('/assets/bg-right-image.png')] top-0 right-0 left-0 bottom-0 bg-cover bg-center absolute"></div>
           </div>
         </div>
       </Dialog>
