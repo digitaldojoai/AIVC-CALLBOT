@@ -40,13 +40,13 @@ const darkTheme = createTheme({
 const data = [
   {
     id: "investor",
-    name: "A venture Capitalist",
+    name: "Venture Capitalist",
     description:
-      "You will receive a summary of the pitch you just receive with feedback helping decisions-making.",
+      "You will receive a summary of the pitch along with feedback to support informed decision-making.",
   },
   {
     id: "startup",
-    name: "A Start-Up Founder",
+    name: "Start-Up Founder",
     description:
       "You will receive feedback on your given pitch to help improve for the better.",
   },
@@ -206,7 +206,10 @@ const VoiceCall = forwardRef((props, ref) => {
               </p>
             </div>
             <FormControl component="fieldset" className="w-full text-black">
-              <h2 className="text-2xl max-md:text-lg mb-2 "> You Are:</h2>
+              <h2 className="text-2xl max-md:text-lg mb-2 ">
+                {" "}
+                Select Your Role:
+              </h2>
 
               <TextField
                 select
