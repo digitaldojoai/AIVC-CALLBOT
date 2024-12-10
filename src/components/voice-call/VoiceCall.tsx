@@ -275,7 +275,7 @@ const VoiceCall = forwardRef((props, ref) => {
             </FormControl>
             <div className="">
               <h2 className="text-2xl max-md:text-lg text-black mb-2">
-                Enter Your Email Address
+                Enter your Email Address
               </h2>
               <TextField
                 className="mt-2"
