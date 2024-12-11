@@ -194,9 +194,17 @@ const VoiceCall = forwardRef((props, ref) => {
           },
         }}
       >
-        <div className="grid grid-cols-4">
+        <div className="grid grid-cols-4 relative">
           <div className="p-6 space-y-6 col-span-3 relative max-md:col-span-4">
             {/* <div className=" absolute top-0 right-0 left-0 bottom-0 min-h-full min-w-full bg-center"></div> */}
+            <p
+              className="absolute top-4 right-4 text-black select-none cursor-pointer text-lg"
+              onClick={() => {
+                setSessionId(undefined);
+              }}
+            >
+              X
+            </p>
             <div>
               <h2 className="font-semibold text-3xl max-md:text-2xl text-center text-black">
                 Receive Pitch Feedback
