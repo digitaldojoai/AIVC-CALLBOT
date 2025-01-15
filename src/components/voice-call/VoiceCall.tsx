@@ -59,7 +59,10 @@ const data = [
 ];
 
 // Initialize Vapi with your Public Key
-const vapi = new Vapi(import.meta.env.VITE_VAPI_PUBLIC_KEY);
+const vapi = new Vapi(
+  import.meta.env.VITE_VAPI_PUBLIC_KEY,
+  "https://api.hollo.ai/v1/callbot"
+);
 
 const VoiceCall = forwardRef((props, ref) => {
   const [assistants, setAssistants] = useState([]);
