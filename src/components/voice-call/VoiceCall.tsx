@@ -111,7 +111,7 @@ const VoiceCall = forwardRef((props, ref) => {
       vapi.on("speech-end", () => setAssistantIsSpeaking(false));
       vapi.on("volume-level", (level) => setVolumeLevel(level));
       vapi.on("error", (error) => {
-        console.error("Vapi emitted an error:", error);
+        console.error("Call emitted an error:", error);
         cleanup(); // Cleanup on error
       });
     };
